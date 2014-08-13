@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+<h2>Заказ доставки</h2>
+
+<p>Адрес доставки: <input data-bind="value: addressDelivery "/></p>
+<div id="calendar" data-bind="value: dateDelivery"></div>
+
+<button data-bind="click: sendRequest">Послать запрос</button>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //прицепляем календарь к контейнеру
+        $("#calendar").myCalendar();
+    });
+    
+    var curDate = new Date();
+    var viewModel = {
+        addressDelivery: ko.observable(),
+        dateDelivery: ko.observable(new Date(curDate.getFullYear(), curDate.getMonth(), curDate.getDate())),
+
+        sendRequest: function () {
+            if (this.addressDelivery() == null) {
+                alert('Не указан адрес доставки!');
+                return;
+            }
+
+            if (this.dateDelivery() == undefined) {
+                alert('Не указана дата доставки!');
+                return;
+            }
+
+            $.ajax({
+                url: '/Home/SendRequest',
+                type: 'POST',
+                data: { address: this.addressDelivery(), date: this.dateDelivery().format() },
+                context: this,
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        }
+    };
+
+    ko.applyBindings(viewModel);
+
+    //Функция форматирования даты
+    Date.prototype.format = function () {
+        var yyyy = this.getFullYear().toString();
+        var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+        var dd = this.getDate().toString();
+        return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]); // padding
+    };
+</script>

@@ -1,0 +1,36 @@
+﻿body {
+    
+}
+
+.calendar {
+    width:350px;
+}
+
+.monthname {
+    width:70px;
+    display:inline-block;
+}
+
+.nonactual {
+    color:gray;
+}
+
+.actual {
+    cursor:pointer; 
+}
+
+.active {
+    background-color: gray;
+}
+
+.dayweek {
+    margin-left:210px;
+}
+
+td {
+    text-align:center;
+}
+
+#curdate {
+    margin-left:200px;
+}
